@@ -1,20 +1,16 @@
 import asyncio
-import configparser
-from aiogram.enums import ParseMode
+import threading
 from bot.core.logger import logger
 
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher
 
 from bot.core.handlers import mainmenu_handler, currency_handler, company_shares_handler, metals_handler, exchange_currency_handler
 from bot.core.handlers.registration import user_registration_handler
 from bot.core.handlers.transaction import transaction_handler
+from bot.core.common.TelegramBot import TelegramBot
+from bot.core.services.NotifierService import NotifierService
 
-parser = configparser.ConfigParser()
-parser.read('../settings.ini')
-api_key = parser['Bot']['tokenapi']
-
-TOKEN_API = api_key
-bot = Bot(TOKEN_API, parse_mode=ParseMode.HTML)
+bot = TelegramBot()
 dp = Dispatcher()
 
 # Уровень логов
@@ -31,6 +27,8 @@ async def main() -> None:
     dp.include_router(metals_handler.router)
     dp.include_router(company_shares_handler.router)
     dp.include_router(currency_handler.router)
+
+    threading.Thread(target=NotifierService().start_service).start()
 
     await dp.start_polling(bot)
 

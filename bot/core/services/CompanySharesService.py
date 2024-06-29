@@ -24,7 +24,6 @@ class CompanyShareService:
             request = requests.get(
                 f'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/{share}/.json').json()
 
-            print(request)
             share_data.append([
                 share,
                 request['marketdata']['data'][0][9], request['marketdata']['data'][0][10],

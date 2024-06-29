@@ -122,11 +122,8 @@ class TransactionService:
 
     @classmethod
     def accept_transaction(cls, id: int):
-        print(id)
-
         Transaction.update(type=2).where(Transaction.id == id).execute()
 
     @classmethod
     def decline_transaction(cls, id: int):
-        print(id)
         Transaction.update(type=0).where(Transaction.id == id).execute()
