@@ -4,7 +4,7 @@ from bot.core.logger import logger
 
 from aiogram import Dispatcher
 
-from bot.core.handlers import mainmenu_handler, currency_handler, company_shares_handler, metals_handler, exchange_currency_handler
+from bot.core.handlers import mainmenu_handler, currency_handler, company_shares_handler, metals_handler, exchange_currency_handler, notify_handler
 from bot.core.handlers.registration import user_registration_handler
 from bot.core.handlers.transaction import transaction_handler
 from bot.core.common.TelegramBot import TelegramBot
@@ -26,6 +26,7 @@ async def main() -> None:
     dp.include_router(transaction_handler.router)
     dp.include_router(metals_handler.router)
     dp.include_router(company_shares_handler.router)
+    dp.include_router(notify_handler.router)
     dp.include_router(currency_handler.router)
 
     threading.Thread(target=NotifierService().start_service).start()

@@ -12,19 +12,30 @@ from bot.core.services.MetalsService import MetalsService
 
 class NotifierService:
     __services = {
-        'company_shares': {
+        'company': {
             'class': 'CompanyShareService',
             'method': 'get_share_info',
+            'name': 'Акции'
         },
         'currency': {
             'class': 'CurrencyService',
             'method': 'get_currency_info',
+            'name': 'Валюта'
         },
         'metals': {
             'class': 'MetalsService',
             'method': 'get_metal_info',
+            'name': 'Металлы'
         },
     }
+
+    @classmethod
+    def get_notify_services_buttons(cls):
+        return cls.__services
+
+    @classmethod
+    def get_notify_service_class(cls, name):
+        return cls.__services[name]['class']
 
     @classmethod
     def __get_service(cls, type):
@@ -40,23 +51,23 @@ class NotifierService:
 
         notify_data = {
             'task_id': task.id,
-            'time': datetime.now() + timedelta(hours=task.time_interval),
+            'time': datetime.now() + timedelta(minutes=int(task.time_interval)),
         }
 
         cls.create_notify(notify_data)
 
     @classmethod
-    def update_notify_time(cls, time_interval):
-        Notifier.update(time=datetime.now() + timedelta(hours=time_interval)).execute()
+    def update_notify_time(cls, time_interval, task_id):
+        Notifier.update(time=datetime.now() + timedelta(minutes=int(time_interval))).where(
+            Notifier.task_id == task_id).execute()
 
     @classmethod
     def execute_task(cls, task_id):
         task = Task.get(Task.id == task_id)
         service = cls.__get_service(task.type)
         text = cls.execute_task_action(service['class'], service['method'], task.value)
-        cls.update_notify_time(task.time_interval)
+        cls.update_notify_time(task.time_interval, task.id)
         asyncio.run(cls.notify(text, task.user_id.telegram_id))
-
 
     @classmethod
     def execute_task_action(cls, service, method, value):
