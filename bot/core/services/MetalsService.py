@@ -2,6 +2,8 @@ import requests
 import datetime
 import xmltodict
 
+from bot.core.services.AgregationService import AgregationService
+from bot.core.db.model.Metals import Metal
 
 class MetalsService:
     BUTTON_ALL_CURRENCIES = 'ALL'
@@ -14,22 +16,22 @@ class MetalsService:
 
     @classmethod
     def get_metal_data(cls, metal_request_id):
-        metal_data = []
-        date = datetime.date.today().strftime('%d/%m/%Y')
-        metals = requests.get(
-            f'https://cbr.ru/scripts/xml_metall.asp?date_req1={date}&date_req2={date}').content
-        metals = xmltodict.parse(metals)['Metall']
+        metals = []
+        metal_data = Metal.select().dicts().get_or_none()
+        if metal_data is None:
+            metal_data = AgregationService.get_metals()
+
 
         if metal_request_id == cls.BUTTON_ALL_CURRENCIES:
-            for metal in metals['Record']:
-                metal_data.append([metal['@Code'], metal['Sell']])
+            for metal in metal_data:
+                metals.append([metal['code'], metal['value']])
         else:
-            for metal in metals['Record']:
-                if int(metal['@Code']) == int(metal_request_id):
-                    metal_data.append([metal['@Code'], metal['Sell']])
+            for metal in metals:
+                if int(metal['code']) == int(metal_request_id):
+                    metals.append([metal['code'], metal['value']])
                     break
 
-        return metal_data
+        return metals
 
     @classmethod
     def __prepare_metal_info(cls, array):

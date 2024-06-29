@@ -1,5 +1,5 @@
 import requests
-
+from bot.core.services.AgregationService import AgregationService
 
 class CurrencyService:
     BUTTON_ALL_CURRENCIES = 'ALL'
@@ -45,7 +45,7 @@ class CurrencyService:
 
     @classmethod
     def __get_request_data(cls):
-        return requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
+        return AgregationService.get_currencies()
 
     @classmethod
     def get_keyboard_data(cls) -> dict:

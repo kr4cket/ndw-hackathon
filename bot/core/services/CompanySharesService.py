@@ -1,5 +1,7 @@
 import requests
+from bot.core.services.AgregationService import AgregationService
 
+from bot.core.db.model.Stocks import Stock
 
 class CompanyShareService:
     BUTTON_ALL_CURRENCIES = 'ALL'
@@ -21,14 +23,11 @@ class CompanyShareService:
             shares = cls.__get_data()
 
         for share in shares:
-            request = requests.get(
-                f'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/{share}/.json').json()
+            request = Stock.get_or_none(Stock.code == share)
+            if request is None:
+                request = AgregationService.get_share(share)
 
-            share_data.append([
-                share,
-                request['marketdata']['data'][0][9], request['marketdata']['data'][0][10],
-                request['marketdata']['data'][0][11], request['marketdata']['data'][0][12]
-            ])
+            share_data.append([request['code'], request['value'],request['high'],request['low'],request['end'] ])
 
         return share_data
 

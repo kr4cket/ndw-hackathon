@@ -6,6 +6,9 @@
     "bot.core.db.model.Notifier.Notifier",
     "bot.core.db.model.Task.Task",
     "bot.core.db.model.Transaction.Transaction",
-    "bot.core.db.model.Users.Users"
+    "bot.core.db.model.Users.Users",
+    "bot.core.db.model.Stocks.Stock",
+    "bot.core.db.model.Currency.Currency",
+    "bot.core.db.model.Metals.Metal"
   ]
 }
