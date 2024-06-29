@@ -18,20 +18,59 @@ class ExchangeCurrencyButton:
         key = InlineKeyboardBuilder()
 
         key.button(text='Создать транзакцию', callback_data='/create_transaction')
-        key.button(text='Активные транзакции', callback_data='/get_active_transactions')
+        key.button(text='Активные транзакции', callback_data='/get_active_transactions_menu')
+        key.button(text='Главное меню', callback_data='/start')
         key.adjust(1)
 
         return key.as_markup()
 
     @classmethod
-    def get_active_transaction_tool(cls, id, is_last=False) -> InlineKeyboardMarkup:
+    def get_active_transaction_tool(cls, id,prev_id=None, next_id=None, by_users=False) -> InlineKeyboardMarkup:
         key = InlineKeyboardBuilder()
 
-        key.button(text='Принять транзакцию', callback_data='/accept_transaction')
-        key.button(text='Отменить транзакцию', callback_data='/decline_transaction')
+        transaction_type = 'me'
 
-        if not is_last:
-            key.button(text='Следущая транзакция', callback_data=f'/next_transaction_{id}')
+        if by_users:
+            transaction_type = 'users'
+            key.button(text='Принять транзакцию', callback_data=f'/accept_transaction_{id}')
+        key.button(text='Отменить транзакцию', callback_data=f'/decline_transaction_{id}')
+
+        if prev_id:
+            key.button(text='Предыдущая транзакция', callback_data=f'/get_transaction_{prev_id}_{transaction_type}')
+
+        if next_id:
+            key.button(text='Следующая транзакция', callback_data=f'/get_transaction_{next_id}_{transaction_type}')
+
+        key.button(text='Вернуться в главное меню', callback_data='/start')
+
         key.adjust(1)
+        return key.as_markup()
 
+    @classmethod
+    def get_retry_operation_buttons(cls):
+        key = InlineKeyboardBuilder()
+
+        key.button(text='Повторить создание транзакции', callback_data='/create_transaction')
+        key.button(text='Вернуться в главное меню', callback_data='/start')
+        key.adjust(1)
+        return key.as_markup()
+
+    @classmethod
+    def get_final_operation_buttons(cls):
+        key = InlineKeyboardBuilder()
+
+        key.button(text='Повторить создание транзакции', callback_data='/create_transaction')
+        key.button(text='Посмотреть активные транзакции', callback_data='/get_active_transactions_menu')
+        key.button(text='Вернуться в главное меню', callback_data='/start')
+        key.adjust(1)
+        return key.as_markup()
+
+    @classmethod
+    def get_active_transaction_tool_type(cls):
+        key = InlineKeyboardBuilder()
+
+        key.button(text='Созданные транзакции', callback_data='/get_active_transaction_by_me')
+        key.button(text='Полученные транзакции', callback_data='/get_active_transaction_by_users')
+        key.button(text='Вернуться в главное меню', callback_data='/start')
+        key.adjust(1)
         return key.as_markup()

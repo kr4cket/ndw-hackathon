@@ -6,7 +6,8 @@ from bot.core.logger import logger
 from aiogram import Bot, Dispatcher
 
 from bot.core.handlers import mainmenu_handler, currency_handler, company_shares_handler, metals_handler, exchange_currency_handler
-from bot.core.handlers.registration import user
+from bot.core.handlers.registration import user_registration_handler
+from bot.core.handlers.transaction import transaction_handler
 
 parser = configparser.ConfigParser()
 parser.read('../settings.ini')
@@ -25,7 +26,8 @@ async def main() -> None:
 
     dp.include_router(mainmenu_handler.router)
     dp.include_router(exchange_currency_handler.router)
-    dp.include_router(user.router)
+    dp.include_router(user_registration_handler.router)
+    dp.include_router(transaction_handler.router)
     dp.include_router(metals_handler.router)
     dp.include_router(company_shares_handler.router)
     dp.include_router(currency_handler.router)

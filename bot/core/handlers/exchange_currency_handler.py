@@ -27,6 +27,10 @@ async def main_menu(callback: CallbackQuery):
         await send_error_message('/currency_exchange', callback.message, logger)
 
 
-@router.callback_query(F.data.contains('/create_transaction'))
-async def create_transaction(callback: CallbackQuery):
-    pass
+@router.callback_query(F.data.contains('/get_active_transactions_menu'))
+async def start_registration(callback: CallbackQuery):
+    try:
+        await callback.message.answer(text='Какие транзакции вам необходимы?',
+                                      reply_markup=ExchangeCurrencyButton().get_active_transaction_tool_type())
+    except:
+        await send_error_message('/get_active_transaction', callback.message, logger)

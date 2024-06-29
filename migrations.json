@@ -3,9 +3,9 @@
   "directory": "migrations",
   "history": "migratehistory",
   "models": [
-        "bot.core.db.model.Notifier.Notifier",
-        "bot.core.db.model.Task.Task",
-        "bot.core.db.model.Transaction.Transaction",
-        "bot.core.db.model.User.User"
+    "bot.core.db.model.Notifier.Notifier",
+    "bot.core.db.model.Task.Task",
+    "bot.core.db.model.Transaction.Transaction",
+    "bot.core.db.model.Users.Users"
   ]
 }
