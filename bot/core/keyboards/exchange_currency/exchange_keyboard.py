@@ -74,3 +74,12 @@ class ExchangeCurrencyButton:
         key.button(text='Вернуться в главное меню', callback_data='/start')
         key.adjust(1)
         return key.as_markup()
+
+
+    @classmethod
+    def get_active_transactions(cls):
+        key = InlineKeyboardBuilder()
+
+        key.button(text='Посмотреть', callback_data='/currency_exchange')
+        key.adjust(1)
+        return key.as_markup()

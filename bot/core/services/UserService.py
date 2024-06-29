@@ -1,4 +1,4 @@
-from bot.core.keyboards.mainmenu.unregister_user_menu import Menu
+from bot.core.keyboards.mainmenu.user_menu import Menu
 from bot.core.db.model.Users import Users as User
 
 

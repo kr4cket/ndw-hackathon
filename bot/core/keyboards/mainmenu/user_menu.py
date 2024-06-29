@@ -23,7 +23,7 @@ class Menu:
         key.button(text='Металлы', callback_data='/metals')
         key.button(text='Валюта', callback_data='/currency')
         key.button(text='Обмен валюты', callback_data='/currency_exchange')
-        key.button(text='Создать напоминание', callback_data='/create_notify')
+        key.button(text='Создать нотификацию', callback_data='/create_notify')
         key.adjust(1)
 
         return key.as_markup()

@@ -1,4 +1,4 @@
-from aiogram import Router, F, types
+from aiogram import Router, F, types, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
@@ -34,11 +34,14 @@ async def first_step_registration(message: types.Message, state: FSMContext):
 
 
 @router.message(CreateTransactionForm.value)
-async def last_step_registration(message: types.Message, state: FSMContext):
+async def last_step_registration(message: types.Message, state: FSMContext, bot: Bot):
     await state.update_data(value=message.text)
-    TransactionService.create_transaction(await state.get_data())
+    transaction = await state.get_data()
+    TransactionService.create_transaction(transaction)
     await message.answer(text=f'Отлично, транзакция создана!',
                          reply_markup=ExchangeCurrencyButton().get_final_operation_buttons())
+    await bot.send_message(chat_id=transaction['receiver'], text='Появилась новая транзакция!',
+                           reply_markup=ExchangeCurrencyButton().get_active_transactions())
 
 
 @router.callback_query(F.data.contains('/get_active_transaction_by_me'))
@@ -87,6 +90,7 @@ async def get_active_transaction(callback: CallbackQuery):
 
     await callback.message.answer(text=text,
                                   reply_markup=ExchangeCurrencyButton.get_active_transaction_tool_type())
+
 
 @router.callback_query(F.data.contains('/decline_transaction_'))
 async def get_active_transaction(callback: CallbackQuery):

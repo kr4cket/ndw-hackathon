@@ -1,6 +1,6 @@
 import datetime
 
-from bot.core.keyboards.mainmenu.unregister_user_menu import Menu
+from bot.core.keyboards.mainmenu.user_menu import Menu
 from bot.core.db.model.Transaction import Transaction
 
 
