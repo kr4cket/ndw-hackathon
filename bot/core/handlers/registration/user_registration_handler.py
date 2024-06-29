@@ -26,6 +26,7 @@ async def first_step_registration(message: types.Message, state: FSMContext):
 @router.message(RegistrationForm.email)
 async def last_step_registration(message: types.Message, state: FSMContext):
     await state.update_data(email=message.text, telegram_id=message.from_user.id)
-    UserService.register_user(await state.get_data())
+    data = await state.get_data()
+    UserService.register_user(data)
 
     await message.answer(text=f'Отлично, регистрация завершена!', reply_markup=BeginKeyboard().get_main_menu_button())
